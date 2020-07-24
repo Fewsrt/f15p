@@ -13,10 +13,18 @@ module.exports = (displayName) => [
         contents: [
           {
             type: "text",
-            text: "Welcome To FaSAC",
+            text: "ขอต้อนรับสู่ระบบค้นหาข้อมูล",
             align: "center",
           },
         ],
+      },
+      hero: {
+        type: "image",
+        url:
+          "https://firebasestorage.googleapis.com/v0/b/f15p-6c132.appspot.com/o/F15P.png?alt=media&token=968ec7f0-2391-4dab-8f46-7eb28ede8012",
+        size: "full",
+        aspectRatio: "1.51:1",
+        aspectMode: "fit",
       },
       body: {
         type: "box",
@@ -24,7 +32,7 @@ module.exports = (displayName) => [
         contents: [
           {
             type: "text",
-            text: "ขอต้อนรับสู่ FaSAC",
+            text: "โครงการ F15P และ UHT",
             align: "center",
           },
         ],
@@ -40,32 +48,16 @@ module.exports = (displayName) => [
           type: "action",
           action: {
             type: "message",
-            label: "เริ่มต้นปลูกผัก",
-            text: "เริ่มต้นปลูกผัก",
+            label: "ข้อมูลพื้นที่",
+            text: "ข้อมูลพื้นที่",
           },
         },
         {
           type: "action",
           action: {
             type: "message",
-            label: "ร้านค้าออนไลน์",
-            text: "ร้านค้าออนไลน์",
-          },
-        },
-        {
-          type: "action",
-          action: {
-            type: "message",
-            label: "ข่าวสาร",
-            text: "ข่าวสาร",
-          },
-        },
-        {
-          type: "action",
-          action: {
-            type: "message",
-            label: "สถานะของผัก",
-            text: "สถานะของผัก",
+            label: "ขอข้อมูล",
+            text: "ขอข้อมูล",
           },
         },
         {

@@ -7,9 +7,13 @@ const figlet = require("figlet");
 const dialogflow = require("dialogflow");
 const { get } = require("lodash");
 const { getUserProfile, getImageContent } = require("./middleware/line");
-const greetings = require("./resposeMessage/greetings");
-const fallback = require("./resposeMessage/fallback");
-const aboutUs = require("./resposeMessage/aboutUs");
+const {
+  greetings,
+  aboutUs,
+  fallback,
+  getstart,
+  country,
+} = require('./resposeMessage')
 const {
   saveUserProfile,
   getUserData,
@@ -88,12 +92,11 @@ async function handleEvent(event, req) {
   }
 
   if (event.type === "message" && event.message.type === "text") {
-    const dialogflowCredential = process.env.DIALOG_FLOW_SERVICE_ACCOUNT;
-    const dialogflowProjectId = process.env.DIALOG_FLOW_Project_ID;
+    const dialogflowProjectId = process.env.DIALOG_FLOW_Project_ID
 
     const sessionClient = new dialogflow.SessionsClient({
       projectId: dialogflowProjectId,
-      credentials: dialogflowCredential,
+      keyFilename: '/Users/Few/Desktop/Fasac/line_Bot/f15p/src/services/dialogflow-service-account.json',
     });
 
     const sessionPath = sessionClient.sessionPath(
@@ -106,10 +109,11 @@ async function handleEvent(event, req) {
       queryInput: {
         text: {
           text: event.message.text,
-          languageCode: "th-TH",
+          languageCode: 'th-TH',
         },
       },
     };
+    
     const currentUser = await getUserData({ userId: req.profile.userId });
     const userCurrentContext = get(currentUser, "context", "");
     let dialogflowResp = null;
@@ -131,6 +135,12 @@ async function handleEvent(event, req) {
     switch (userIntent) {
       case "aboutme":
         message = aboutUs();
+        break;
+      case "Get_Start":
+        message = getstart();
+        break;
+      case "Country":
+        message = country();
         break;
       default:
         message = fallback(req.profile.displayName);

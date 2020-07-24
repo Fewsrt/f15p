@@ -14,32 +14,8 @@ module.exports = (displayName) => [
           type: "action",
           action: {
             type: "message",
-            label: "เริ่มต้นปลูกผัก",
-            text: "เริ่มต้นปลูกผัก",
-          },
-        },
-        {
-          type: "action",
-          action: {
-            type: "message",
-            label: "ร้านค้าออนไลน์",
-            text: "ร้านค้าออนไลน์",
-          },
-        },
-        {
-          type: "action",
-          action: {
-            type: "message",
-            label: "ข่าวสาร",
-            text: "ข่าวสาร",
-          },
-        },
-        {
-          type: "action",
-          action: {
-            type: "message",
-            label: "สถานะของผัก",
-            text: "สถานะของผัก",
+            label: "ข้อมูลพื้นที่",
+            text: "ข้อมูลพื้นที่",
           },
         },
         {

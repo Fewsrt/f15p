@@ -56,6 +56,14 @@ module.exports = (displayName) => [
           type: "action",
           action: {
             type: "message",
+            label: "ขอข้อมูล",
+            text: "ขอข้อมูล",
+          },
+        },
+        {
+          type: "action",
+          action: {
+            type: "message",
             label: "ติดต่อเรา",
             text: "ติดต่อเรา",
           },
