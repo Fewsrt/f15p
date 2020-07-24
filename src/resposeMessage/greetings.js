@@ -3,21 +3,28 @@ require("dotenv").config();
 module.exports = (displayName) => [
   {
     type: "flex",
-    altText: "Flex Message",
+    altText: "Welcome to FaSAC",
     contents: {
       type: "bubble",
+      direction: "ltr",
+      header: {
+        type: "box",
+        layout: "vertical",
+        contents: [
+          {
+            type: "text",
+            text: "ขอต้อนรับสู่ระบบค้นหาข้อมูล",
+            align: "center",
+          },
+        ],
+      },
       hero: {
         type: "image",
         url:
-          "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
+          "https://firebasestorage.googleapis.com/v0/b/f15p-6c132.appspot.com/o/F15P.png?alt=media&token=968ec7f0-2391-4dab-8f46-7eb28ede8012",
         size: "full",
-        aspectRatio: "20:13",
-        aspectMode: "cover",
-        action: {
-          type: "uri",
-          label: "Line",
-          uri: "https://linecorp.com/",
-        },
+        aspectRatio: "1.51:1",
+        aspectMode: "fit",
       },
       body: {
         type: "box",
@@ -25,141 +32,35 @@ module.exports = (displayName) => [
         contents: [
           {
             type: "text",
-            text: "Brown Cafe",
-            size: "xl",
-            weight: "bold",
-          },
-          {
-            type: "box",
-            layout: "baseline",
-            margin: "md",
-            contents: [
-              {
-                type: "icon",
-                url:
-                  "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                size: "sm",
-              },
-              {
-                type: "icon",
-                url:
-                  "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                size: "sm",
-              },
-              {
-                type: "icon",
-                url:
-                  "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                size: "sm",
-              },
-              {
-                type: "icon",
-                url:
-                  "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                size: "sm",
-              },
-              {
-                type: "icon",
-                url:
-                  "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png",
-                size: "sm",
-              },
-              {
-                type: "text",
-                text: "4.0",
-                flex: 0,
-                margin: "md",
-                size: "sm",
-                color: "#999999",
-              },
-            ],
-          },
-          {
-            type: "box",
-            layout: "vertical",
-            spacing: "sm",
-            margin: "lg",
-            contents: [
-              {
-                type: "box",
-                layout: "baseline",
-                spacing: "sm",
-                contents: [
-                  {
-                    type: "text",
-                    text: "Place",
-                    flex: 1,
-                    size: "sm",
-                    color: "#AAAAAA",
-                  },
-                  {
-                    type: "text",
-                    text: "Miraina Tower, 4-1-6 Shinjuku, Tokyo",
-                    flex: 5,
-                    size: "sm",
-                    color: "#666666",
-                    wrap: true,
-                  },
-                ],
-              },
-              {
-                type: "box",
-                layout: "baseline",
-                spacing: "sm",
-                contents: [
-                  {
-                    type: "text",
-                    text: "Time",
-                    flex: 1,
-                    size: "sm",
-                    color: "#AAAAAA",
-                  },
-                  {
-                    type: "text",
-                    text: "10:00 - 23:00",
-                    flex: 5,
-                    size: "sm",
-                    color: "#666666",
-                    wrap: true,
-                  },
-                ],
-              },
-            ],
+            text: "โครงการ F15P และ UHT",
+            align: "center",
           },
         ],
       },
-      footer: {
-        type: "box",
-        layout: "vertical",
-        flex: 0,
-        spacing: "sm",
-        contents: [
-          {
-            type: "button",
-            action: {
-              type: "uri",
-              label: "CALL",
-              uri: "https://linecorp.com",
-            },
-            height: "sm",
-            style: "link",
+    },
+  },
+  {
+    type: "text",
+    text: `คุณ ${displayName} สามารถเลือกเพิ่มเติม ได้โดยการใช้ตัวช่วยที่เราเตรียมไว้ให้ข้างล่างนี้ได้เลย`,
+    quickReply: {
+      items: [
+        {
+          type: "action",
+          action: {
+            type: "message",
+            label: "ข้อมูลพื้นที่",
+            text: "ข้อมูลพื้นที่",
           },
-          {
-            type: "button",
-            action: {
-              type: "uri",
-              label: "WEBSITE",
-              uri: "https://linecorp.com",
-            },
-            height: "sm",
-            style: "link",
+        },
+        {
+          type: "action",
+          action: {
+            type: "message",
+            label: "ติดต่อเรา",
+            text: "ติดต่อเรา",
           },
-          {
-            type: "spacer",
-            size: "sm",
-          },
-        ],
-      },
+        },
+      ],
     },
   },
 ];

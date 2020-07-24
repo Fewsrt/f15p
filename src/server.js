@@ -1,19 +1,15 @@
 require("dotenv").config();
 const line = require("@line/bot-sdk");
+const express = require("express");
+const app = express();
 const Sentry = require("@sentry/node");
 const figlet = require("figlet");
 const dialogflow = require("dialogflow");
 const { get } = require("lodash");
-const { base64ToJSON } = require("./utils");
 const { getUserProfile, getImageContent } = require("./middleware/line");
-const express = require("express");
-const bodyParser = require("body-parser");
-const request = require("request");
-const app = express();
-const port = process.env.PORT || 4000;
-const {
-  greetings,
-} = require("./resposeMessage");
+const greetings = require("./resposeMessage/greetings");
+const fallback = require("./resposeMessage/fallback");
+const aboutUs = require("./resposeMessage/aboutUs");
 const {
   saveUserProfile,
   getUserData,
@@ -24,41 +20,129 @@ const {
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
   channelSecret: process.env.CHANNEL_SECRET,
-}
+};
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+const client = new line.Client(config);
 
-app.post("/webhook", (req, res) => {
-  let reply_token = req.body.events[0].replyToken;
-  let msg = req.body.events[0].message.text;
-  reply(reply_token, msg);
-  res.sendStatus(200);
-});
-app.listen(port);
-function reply(reply_token, msg) {
-  let headers = {
-    "Content-Type": "application/json",
-    Authorization:
-      "Bearer {KgShB29fTkZDN1AbVTfZok/t+EXmcHh8eZvF306SbZCKwiGLg68l/jCfkf3FihSo7oMU4FjplLFCnb9OlOZh61i7TuUu9FyYdogAPuxmqnBgjdFpv8bQ874xMbcNdyCaQrQALkiFRGt960WrO0L1egdB04t89/1O/w1cDnyilFU=}",
-  };
-  let body = JSON.stringify({
-    replyToken: reply_token,
-    messages: [
-      {
-        type: "text",
-        text: msg,
-      },
-    ],
-  });
-  request.post(
-    {
-      url: "https://api.line.me/v2/bot/message/reply",
-      headers: headers,
-      body: body,
-    },
-    (err, res, body) => {
-      console.log("status = " + res.statusCode);
+Sentry.init({ dsn: process.env.SENTRY_DSN, env: process.env.SENTRY_ENV });
+
+figlet(
+  `${process.env.APP_NAME}`,
+  {
+    font: "isometric3",
+    horizontalLayout: "default",
+    verticalLayout: "default",
+  },
+  function (err, data) {
+    if (err) {
+      console.log("Something went wrong...");
+      console.dir(err);
+      return;
     }
-  );
+    console.log(data);
+  }
+);
+
+app.use(Sentry.Handlers.requestHandler());
+
+app.get("/", (req, res) => res.send("Hello World!"));
+
+app.post("/test", (req, res) => {
+  console.log(req.body);
+});
+
+app.post(
+  "/callback",
+  line.middleware(config),
+  getUserProfile(client),
+  (req, res) => {
+    Promise.all(req.body.events.map((event) => handleEvent(event, req)))
+      .then((result) => res.json(result))
+      .catch((err) => {
+        console.error(err);
+        res.status(500).end();
+      });
+  }
+);
+
+async function handleEvent(event, req) {
+  if (event.type === "follow") {
+    await saveUserProfile({ profile: req.profile, status: "follow" });
+    return client.replyMessage(
+      event.replyToken,
+      greetings(req.profile.displayName)
+    );
+  }
+
+  if (event.type === 'message' && event.message.type === 'image') {
+    let message = null
+    const messageId = get(event, 'message.id', 0)
+    const image = await client.getMessageContent(messageId)
+    console.log(image);
+    // uploadImageToImageProcessingServer
+    message = {
+      type: 'text',
+      text: 'Decease Detected!',
+    }
+    return client.replyMessage(event.replyToken, message)
+  }
+
+  if (event.type === "message" && event.message.type === "text") {
+    const dialogflowCredential = process.env.DIALOG_FLOW_SERVICE_ACCOUNT;
+    const dialogflowProjectId = process.env.DIALOG_FLOW_Project_ID;
+
+    const sessionClient = new dialogflow.SessionsClient({
+      projectId: dialogflowProjectId,
+      credentials: dialogflowCredential,
+    });
+
+    const sessionPath = sessionClient.sessionPath(
+      dialogflowProjectId,
+      req.profile.userId
+    );
+
+    const queryParams = {
+      session: sessionPath,
+      queryInput: {
+        text: {
+          text: event.message.text,
+          languageCode: "th-TH",
+        },
+      },
+    };
+    const currentUser = await getUserData({ userId: req.profile.userId });
+    const userCurrentContext = get(currentUser, "context", "");
+    let dialogflowResp = null;
+    if (userCurrentContext.startsWith("get_")) {
+      dialogflowResp = [
+        {
+          queryResult: {
+            intent: {
+              displayName: userCurrentContext,
+            },
+          },
+        },
+      ];
+    } else {
+      dialogflowResp = await sessionClient.detectIntent(queryParams);
+    }
+    const userIntent = get(dialogflowResp, "0.queryResult.intent.displayName");
+    let message = null;
+    switch (userIntent) {
+      case "aboutme":
+        message = aboutUs();
+        break;
+      default:
+        message = fallback(req.profile.displayName);
+        break;
+    }
+    return client.replyMessage(event.replyToken, message);
+  }
+  return Promise.resolve(null);
 }
+
+app.use(Sentry.Handlers.errorHandler());
+
+app.listen(process.env.PORT || 5000, () =>
+  console.log("listening on port 5000!")
+);
