@@ -97,7 +97,8 @@ async function handleEvent(event, req) {
 
     const sessionClient = new dialogflow.SessionsClient({
       projectId: dialogflowProjectId,
-      keyFilename: '/Users/Few/Desktop/Fasac/line_Bot/f15p/src/services/dialogflow-service-account.json',
+      client_email: process.env.DIALOG_FLOW_CLIENT_EMAIL,
+      privateKey: process.env.DIALOG_FLOW_PRIVATE_KEY.replace(/\\n/g, "\n"),
     });
 
     const sessionPath = sessionClient.sessionPath(
