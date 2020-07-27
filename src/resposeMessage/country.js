@@ -1,7 +1,7 @@
 module.exports = () => [
   {
     type: "flex",
-    altText: "Flex Message",
+    altText: "ข้อมูลจังหวัดร้อยเอ็ด",
     contents: {
       type: "bubble",
       header: {
@@ -115,11 +115,35 @@ module.exports = () => [
             action: {
               type: "uri",
               label: "ข้อมูลเพิ่มเติม",
-              uri: "https://th.wikipedia.org/wiki/จังหวัดร้อยเอ็ด",
+              uri: "https://liff.line.me/1654550439-ekzxYQ08",
             },
           },
         ],
       },
+    },
+  },
+  {
+    type: "text",
+    text: `คุณสามารถเลือกข้อมูลเพิ่มเติม ได้โดยการใช้ตัวช่วยที่เราเตรียมไว้ให้ข้างล่างนี้ได้เลย`,
+    quickReply: {
+      items: [
+        {
+          type: "action",
+          action: {
+            type: "message",
+            label: "ข้อมูลตำบล",
+            text: "ข้อมูลตำบล",
+          },
+        },
+        {
+          type: "action",
+          action: {
+            type: "message",
+            label: "ขอข้อมูล",
+            text: "ขอข้อมูล",
+          },
+        },
+      ],
     },
   },
 ];

@@ -13,6 +13,7 @@ const {
   fallback,
   getstart,
   country,
+  subcountry,
 } = require('./resposeMessage')
 const {
   saveUserProfile,
@@ -141,6 +142,9 @@ async function handleEvent(event, req) {
         break;
       case "Country":
         message = country();
+        break;
+      case "Sub_Country":
+        message = subcountry();
         break;
       default:
         message = fallback(req.profile.displayName);
