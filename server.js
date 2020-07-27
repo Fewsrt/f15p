@@ -83,7 +83,6 @@ async function handleEvent(event, req) {
     let message = null;
     const messageId = get(event, "message.id", 0);
     const image = await client.getMessageContent(messageId);
-    console.log(image);
     // uploadImageToImageProcessingServer
     message = {
       type: "text",
