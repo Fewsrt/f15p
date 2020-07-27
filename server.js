@@ -70,9 +70,9 @@ app.post(
   }
 );
 
-async function handleEvent(event, req) {
+function handleEvent(event, req) {
   if (event.type === "follow") {
-    await saveUserProfile({ profile: req.profile, status: "follow" });
+    saveUserProfile({ profile: req.profile, status: "follow" });
     return client.replyMessage(
       event.replyToken,
       greetings(req.profile.displayName)
@@ -82,7 +82,7 @@ async function handleEvent(event, req) {
   if (event.type === "message" && event.message.type === "image") {
     let message = null;
     const messageId = get(event, "message.id", 0);
-    const image = await client.getMessageContent(messageId);
+    const image = client.getMessageContent(messageId);
     // uploadImageToImageProcessingServer
     message = {
       type: "text",
@@ -121,7 +121,7 @@ async function handleEvent(event, req) {
       },
     };
 
-    const currentUser = await getUserData({ userId: req.profile.userId });
+    const currentUser = getUserData({ userId: req.profile.userId });
     const userCurrentContext = get(currentUser, "context", "");
     let dialogflowResp = null;
     if (userCurrentContext.startsWith("get_")) {
@@ -135,7 +135,7 @@ async function handleEvent(event, req) {
         },
       ];
     } else {
-      dialogflowResp = await sessionClient.detectIntent(queryParams);
+      dialogflowResp = sessionClient.detectIntent(queryParams);
     }
     const userIntent = get(dialogflowResp, "0.queryResult.intent.displayName");
     let message = null;
