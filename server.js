@@ -100,6 +100,10 @@ async function handleEvent(event, req) {
       privateKey: process.env.DIALOG_FLOW_PRIVATE_KEY.replace(/\\n/g, "\n"),
       private_key_id: process.env.DIALOG_FLOW_PRIVATE_ID,
       client_id: process.env.DIALOG_FLOW_CLIENT_ID,
+      auth_uri: process.env.DIALOG_FLOW_AUTH_URI,
+      token_uri: process.env.DIALOG_FLOW_TOKEN_URI,
+      auth_provider_x509_cert_url: process.env.auth_provider_x509_cert_url,
+      client_x509_cert_url: process.env.DIALOG_FLOW_client_x509_cert_url,
     });
 
     const sessionPath = sessionClient.sessionPath(
