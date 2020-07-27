@@ -14,7 +14,7 @@ const {
   getstart,
   country,
   subcountry,
-} = require('./src/resposeMessage')
+} = require("./src/resposeMessage");
 const {
   saveUserProfile,
   getUserData,
@@ -79,26 +79,28 @@ async function handleEvent(event, req) {
     );
   }
 
-  if (event.type === 'message' && event.message.type === 'image') {
-    let message = null
-    const messageId = get(event, 'message.id', 0)
-    const image = await client.getMessageContent(messageId)
+  if (event.type === "message" && event.message.type === "image") {
+    let message = null;
+    const messageId = get(event, "message.id", 0);
+    const image = await client.getMessageContent(messageId);
     console.log(image);
     // uploadImageToImageProcessingServer
     message = {
-      type: 'text',
-      text: 'Decease Detected!',
-    }
-    return client.replyMessage(event.replyToken, message)
+      type: "text",
+      text: "Decease Detected!",
+    };
+    return client.replyMessage(event.replyToken, message);
   }
 
   if (event.type === "message" && event.message.type === "text") {
-    const dialogflowProjectId = process.env.DIALOG_FLOW_Project_ID
+    const dialogflowProjectId = process.env.DIALOG_FLOW_Project_ID;
 
     const sessionClient = new dialogflow.SessionsClient({
       projectId: dialogflowProjectId,
       client_email: process.env.DIALOG_FLOW_CLIENT_EMAIL,
       privateKey: process.env.DIALOG_FLOW_PRIVATE_KEY.replace(/\\n/g, "\n"),
+      private_key_id: process.env.DIALOG_FLOW_PRIVATE_ID,
+      client_id: process.env.DIALOG_FLOW_CLIENT_ID,
     });
 
     const sessionPath = sessionClient.sessionPath(
@@ -111,11 +113,11 @@ async function handleEvent(event, req) {
       queryInput: {
         text: {
           text: event.message.text,
-          languageCode: 'th-TH',
+          languageCode: "th-TH",
         },
       },
     };
-    
+
     const currentUser = await getUserData({ userId: req.profile.userId });
     const userCurrentContext = get(currentUser, "context", "");
     let dialogflowResp = null;
