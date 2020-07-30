@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 const Sentry = require("@sentry/node");
 const figlet = require("figlet");
-const dialogflow = require('dialogflow');
+const dialogflow = require("dialogflow");
 const { get } = require("lodash");
 const { getUserProfile, getImageContent } = require("./src/middleware/line");
 const {
@@ -96,8 +96,11 @@ async function handleEvent(event, req) {
 
     const sessionClient = new dialogflow.SessionsClient({
       projectId: dialogflowProjectId,
-      keyFilename : "/Users/Few/Desktop/Fasac/line_Bot/f15p/src/services/dialogflow-service-account.json"
-
+      //Window
+      keyFilename:
+        "/Users/fewetp/Desktop/Fasac/linebot/f15p/src/services/dialogflow-service-account.json",
+      //Mac
+      //keyFilename : "/Users/fewetp/Desktop/Fasac/linebot/f15p/src/services/dialogflow-service-account.json⁩"
     });
 
     const sessionPath = sessionClient.sessionPath(
