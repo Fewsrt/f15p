@@ -96,10 +96,7 @@ async function handleEvent(event, req) {
 
     const sessionClient = new dialogflow.SessionsClient({
       projectId: dialogflowProjectId,
-      //Window
-      keyFilename : "/Users/fewetp/Desktop/Fasac/linebot/f15p/src/services/dialogflow-service-account.json"
-      //Mac
-      //keyFilename : "/Users/fewetp/Desktop/Fasac/linebot/f15p/src/services/dialogflow-service-account.json⁩"
+      keyFilename : "/Users/Few/Desktop/Fasac/line_Bot/f15p/src/services/dialogflow-service-account.json"
 
     });
 
